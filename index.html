@@ -12,19 +12,16 @@
   <style>
     :root {
       --bg: #f8fafc;
-      --surface: #ffffff;
+      --surface: rgba(255, 255, 255, 0.94);
       --text: #0f172a;
-      --text-muted: #64748b;
-      --text-subtle: #94a3b8;
-      --line: #cbd5e1;
+      --text-muted: #475569;
+      --text-subtle: #64748b;
+      --line: #64748b;
       
-      --color-x: #2563eb;
-      --color-x-bg: #eff6ff;
-      --color-o: #e11d48;
-      --color-o-bg: #fff1f2;
-      --color-tie: #f59e0b;
+      --color-heart: #e11d48;
+      --color-robot: #2563eb;
+      --color-tie: #d97706;
 
-      /* Màu 3 cấp độ chuẩn ảnh */
       --c-easy: #059669;
       --c-easy-light: #ecfdf5;
       --c-easy-border: #10b981;
@@ -57,188 +54,282 @@
       min-height: 100vh;
       min-height: 100dvh;
       overflow: hidden;
-      background: #f0f4f8;
-      color: var(--text);
       font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
     }
 
+    /* HÌNH NỀN THIÊN NHIÊN PHỦ TOÀN BỘ MÀN HÌNH */
     body {
       display: flex;
       flex-direction: column;
       position: relative;
+      background-color: #7dd3fc;
+      background-image: url('./image/bg.png');
+      background-repeat: no-repeat;
+      background-position: center bottom;
+      background-size: cover;
+      background-attachment: fixed;
+      color: var(--text);
     }
 
     /* ========================================================
-       LỚP HỌA TIẾT NỀN
+       6 QUẢ CẦU AI TRANG TRÍ XUNG QUANH NỀN
        ======================================================== */
-    .bg-decorations {
+    .floating-decor-layer {
       position: fixed;
       inset: 0;
       pointer-events: none;
-      z-index: 1;
+      z-index: 5;
       overflow: hidden;
     }
 
-    .bg-dot-grid {
+    /* ========================================================
+       DECOR AI: NHỎ HƠN, MỜ DỊU MẮT VÀ LỆCH TỰ NHIÊN
+       ======================================================== */
+    .decor-bubble {
       position: absolute;
-      inset: 0;
-      background-image: radial-gradient(#cbd5e1 1.25px, transparent 1.25px);
-      background-size: 28px 28px;
-      opacity: 0.55;
-    }
-
-    .ambient-glow {
-      position: absolute;
+      /* Thu nhỏ kích thước lại */
+      width: clamp(40px, 4.2vw, 58px);
+      height: clamp(40px, 4.2vw, 58px);
       border-radius: 50%;
-      filter: blur(85px);
-      opacity: 0.42;
-      animation: floatAura 12s ease-in-out infinite alternate;
-    }
-    .aura-blue {
-      width: 420px;
-      height: 420px;
-      background: radial-gradient(circle, #bfdbfe, #60a5fa);
-      top: -100px;
-      left: -90px;
-    }
-    .aura-pink {
-      width: 440px;
-      height: 440px;
-      background: radial-gradient(circle, #fbcfe8, #fda4af);
-      bottom: -120px;
-      right: -80px;
-      animation-delay: -5s;
-    }
-    .aura-green {
-      width: 280px;
-      height: 280px;
-      background: radial-gradient(circle, #a7f3d0, #6ee7b7);
-      bottom: 20%;
-      left: 4%;
-      animation-delay: -3s;
+      /* Làm mờ nhẹ nền để không chiếm spotlight */
+      opacity: 0.7;
+      filter: drop-shadow(0 6px 12px rgba(15, 23, 42, 0.12));
+      object-fit: contain;
+      will-change: transform, opacity;
+      animation: floatBob 4.2s ease-in-out infinite alternate;
     }
 
-    @keyframes floatAura {
-      0% { transform: translateY(0) scale(1); }
-      100% { transform: translateY(35px) scale(1.08); }
+    /* Hiệu ứng nhấp nhô phập phồng nhẹ nhàng, giữ độ mờ 0.55 - 0.75 */
+    @keyframes floatBob {
+      0% {
+        transform: translateY(0px) rotate(0deg);
+        opacity: 0.7;
+      }
+      100% {
+        transform: translateY(-10px) rotate(3deg);
+        opacity: 0.7;
+      }
     }
 
-    .floating-xo {
-      position: absolute;
-      animation: driftXO 10s ease-in-out infinite alternate;
+    /* 2 quả phía trên giữa (1 quả cao hơn, 1 quả thấp hơn lệch ngẫu nhiên) */
+    .decor-bubble.b1 { 
+      top: 18px; 
+      left: 34%; 
+      width: clamp(36px, 3.8vw, 52px);
+      height: clamp(36px, 3.8vw, 52px);
+      animation-duration: 3.8s; 
+      animation-delay: 0s; 
     }
-    .xo-1 { top: 6%; left: 2%; animation-duration: 9s; opacity: 0.42; }
-    .xo-2 { top: 7%; right: 2.5%; animation-duration: 12s; animation-delay: -2s; opacity: 0.42; }
-    .xo-3 { bottom: 6%; left: 2.2%; animation-duration: 10s; animation-delay: -4s; opacity: 0.42; }
-    .xo-4 { bottom: 6%; right: 2.2%; animation-duration: 11s; animation-delay: -1s; opacity: 0.42; }
-    .xo-5 { top: 48%; left: 1%; animation-duration: 13s; animation-delay: -3s; opacity: 0.38; }
-    .xo-6 { top: 46%; right: 1%; animation-duration: 10.5s; animation-delay: -2.5s; opacity: 0.38; }
+    .decor-bubble.b2 { 
+      top: 32px; 
+      left: 64%; 
+      animation-duration: 4.5s; 
+      animation-delay: 0.9s; 
+    }
 
-    @keyframes driftXO {
-      0% { transform: translate(0, 0) rotate(0deg) scale(1); }
-      50% { transform: translate(6px, -10px) rotate(8deg) scale(1.03); }
-      100% { transform: translate(-6px, 8px) rotate(-6deg) scale(0.97); }
+    /* 1 quả mép phải (căn giữa nhưng lệch nhẹ xuống dưới góc nhìn) */
+    .decor-bubble.b3 { 
+      top: 53%; 
+      right: clamp(14px, 2.8vw, 42px); 
+      transform: translateY(-50%); 
+      animation-duration: 4s; 
+      animation-delay: 0.4s; 
+    }
+
+    /* 3 quả phía dưới (so le độ cao, không thẳng hàng ngang) */
+    .decor-bubble.b4 { 
+      bottom: clamp(24px, 4vh, 48px); 
+      left: clamp(24px, 5.5vw, 85px); 
+      animation-duration: 4.6s; 
+      animation-delay: 1.4s; 
+    }
+    .decor-bubble.b5 { 
+      bottom: clamp(8px, 1.8vh, 18px); 
+      left: 47%; 
+      width: clamp(38px, 4vw, 54px);
+      height: clamp(38px, 4vw, 54px);
+      animation-duration: 3.9s; 
+      animation-delay: 0.2s; 
+    }
+    .decor-bubble.b6 { 
+      bottom: clamp(32px, 5vh, 56px); 
+      right: clamp(28px, 6.5vw, 100px); 
+      animation-duration: 4.3s; 
+      animation-delay: 1.8s; 
     }
 
     /* ========================================================
-       HEADER TRÊN CÙNG
+       LOGO GÓC TRÊN BÊN TRÁI
        ======================================================== */
+    .logo-slot-left {
+      position: fixed;
+      top: 16px;
+      left: clamp(16px, 2.8vw, 36px);
+      width: clamp(65px, 6.5vw, 88px);
+      height: clamp(65px, 6.5vw, 88px);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+      cursor: pointer;
+      transition: transform 0.25s ease;
+    }
+    .logo-slot-left:hover {
+      transform: scale(1.08);
+    }
+    .logo-slot-left img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    /* ========================================================
+       1. ROBOT MASCOT SẢNH CHỜ: BÊN TRÁI
+       ======================================================== */
+    .mascot-robot {
+      position: fixed;
+      top: 50%;
+      left: clamp(14px, 2.5vw, 32px);
+      transform: translateY(-50%);
+      z-index: 35;
+      width: clamp(110px, 14vw, 180px);
+      pointer-events: none;
+      filter: drop-shadow(0 12px 22px rgba(15, 23, 42, 0.25));
+      animation: robotHover 3.2s ease-in-out infinite alternate;
+      transform-origin: center center;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .mascot-robot.hidden-mascot {
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-40%) scale(0.85);
+    }
+
+    .mascot-img {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: contain;
+    }
+
+    @keyframes robotHover {
+      0% { transform: translateY(-50%) rotate(0deg) scale(1); }
+      50% { transform: translateY(-54%) rotate(-3deg) scale(1.02); }
+      100% { transform: translateY(-46%) rotate(3deg) scale(0.98); }
+    }
+
+    /* ROBOT GÓC PHẢI TRONG MÀN HÌNH CHƠI */
+    /* ROBOT GÓC PHẢI TRONG MÀN HÌNH CHƠI: TO HƠN VÀ DỜI LÊN TRÊN */
+    .ingame-robot {
+      position: fixed;
+      /* Đẩy lên phía trên khỏi mép đáy màn hình */
+      bottom: clamp(60px, 12vh, 120px);
+      right: clamp(20px, 4vw, 55px);
+      
+      /* Phóng to kích thước nổi bật */
+      width: clamp(140px, 16vw, 220px);
+      
+      pointer-events: none;
+      z-index: 35;
+      filter: drop-shadow(0 14px 26px rgba(15, 23, 42, 0.3));
+      animation: ingameRobotFloat 3.2s ease-in-out infinite alternate;
+      display: none;
+    }
+
+    .ingame-robot.show-ingame {
+      display: block;
+    }
+
+    @keyframes ingameRobotFloat {
+      0% { transform: translateY(0px) rotate(0deg); }
+      100% { transform: translateY(-10px) rotate(4deg); }
+    }
+
+    /* ========================================================
+       2. LOGO GÓC TRÊN BÊN PHẢI
+       ======================================================== */
+    .logo-slot {
+      position: fixed;
+      top: -50px;
+      right: clamp(18px, 3vw, 36px);
+      width: 350px;
+      height: 350px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      z-index: 50;
+    }
+
+    .logo-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    /* HEADER */
     .top-header {
       width: 100%;
-      max-width: 1120px;
-      margin: 0 auto;
+      padding: 18px 28px;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      padding: 16px 24px;
+      justify-content: flex-start;
       z-index: 40;
       flex-shrink: 0;
       position: relative;
     }
 
-    .header-left {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    /* Container gom tiêu đề và huy hiệu độ khó khi chơi */
-    .brand-group {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 4px;
-    }
-
     .btn-header-back {
-      width: 32px;
-      height: 32px;
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
-      border: 1px solid rgba(148, 163, 184, 0.45);
-      background: rgba(255, 255, 255, 0.7);
-      backdrop-filter: blur(8px);
-      color: #64748b;
+      border: 1.5px solid rgba(255, 255, 255, 0.85);
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(12px);
+      color: #334155;
       cursor: pointer;
       display: none;
       align-items: center;
       justify-content: center;
-      opacity: 0.8;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
       transition: all 0.2s ease;
+      margin-left: clamp(80px, 8vw, 105px); /* Tránh đè lên logo bên trái */
+      margin-right: 12px;
     }
     .btn-header-back:hover {
-      opacity: 1;
       background: #ffffff;
       color: #0f172a;
-      transform: scale(1.06);
+      transform: scale(1.08);
     }
 
-    .capsule-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 5px 14px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(8px);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-      border: 1px solid rgba(226, 232, 240, 0.8);
-      font-size: 0.92rem;
-      font-weight: 800;
-      letter-spacing: -0.3px;
-      cursor: pointer;
-    }
-    .badge-x { color: var(--color-x); }
-    .badge-o { color: var(--color-o); }
-    .badge-text { color: #0f172a; }
-
-    /* HUY HIỆU ĐỘ KHÓ TINH GỌN (CHỈ CÒN TÊN MỨC ĐỘ) */
     .game-difficulty-indicator {
-      display: none; /* Chỉ hiện khi vào màn chơi */
+      display: none;
       align-items: center;
       gap: 6px;
-      padding: 3px 12px;
+      padding: 6px 16px;
       border-radius: 999px;
-      background: rgba(255, 255, 255, 0.9);
-      backdrop-filter: blur(8px);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
-      font-size: 0.75rem;
+      background: rgba(255, 255, 255, 0.5);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+      font-size: 0.82rem;
       font-weight: 900;
       letter-spacing: 0.6px;
       border: 1.5px solid transparent;
-      transition: all 0.25s ease;
       width: fit-content;
     }
 
     .diff-status-dot {
-      width: 7px;
-      height: 7px;
+      width: 8px;
+      height: 8px;
       border-radius: 50%;
     }
 
     .game-difficulty-indicator.diff-easy {
       border-color: #a7f3d0;
       color: #059669;
-      box-shadow: 0 2px 10px var(--c-easy-glow);
     }
     .game-difficulty-indicator.diff-easy .diff-status-dot {
       background: #10b981;
@@ -248,7 +339,6 @@
     .game-difficulty-indicator.diff-medium {
       border-color: #bfdbfe;
       color: #2563eb;
-      box-shadow: 0 2px 10px var(--c-med-glow);
     }
     .game-difficulty-indicator.diff-medium .diff-status-dot {
       background: #3b82f6;
@@ -258,46 +348,13 @@
     .game-difficulty-indicator.diff-hard {
       border-color: #fecdd3;
       color: #e11d48;
-      box-shadow: 0 2px 10px var(--c-hard-glow);
     }
     .game-difficulty-indicator.diff-hard .diff-status-dot {
       background: #f43f5e;
       box-shadow: 0 0 6px #f43f5e;
     }
 
-    .logo-slot {
-      height: 90px;
-      min-width: 96px;
-      max-width: 200px;
-      padding: 3px 8px;
-      border-radius: 700px;
-      background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(8px);
-      border: 1.5px dashed #93c5fd;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-      overflow: hidden;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-    .logo-slot:hover {
-      border-style: solid;
-      border-color: var(--color-x);
-      transform: translateY(-1px);
-    }
-    .logo-img {
-      max-height: 50px;
-      width: auto;
-      max-width: 100%;
-      object-fit: contain;
-      display: block;
-    }
-
-    /* ========================================================
-       CONTAINER CHÍNH ĐỘC LẬP
-       ======================================================== */
+    /* CONTAINER CHÍNH */
     main {
       flex: 1;
       width: 100%;
@@ -305,7 +362,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 10px 20px 20px;
+      padding: 10px 24px 24px;
       z-index: 10;
       position: relative;
       min-height: 0;
@@ -322,26 +379,36 @@
       display: none !important;
     }
 
+    .shimmer-text {
+      color: #1d4ed8;
+      text-shadow: 0 2px 8px rgba(37, 99, 235, 0.25), 0 1px 2px rgba(255, 255, 255, 0.8);
+      display: inline-block;
+    }
+
     /* ========================================================
-       MÀN HÌNH 1: SẢNH CHỌN MỨC ĐỘ (LOBBY)
+       3. SẢNH CHỌN MỨC ĐỘ
        ======================================================== */
     .lobby-box {
-      width: 100%;
-      max-width: 900px;
-      background: #ffffff;
-      border-radius: 36px;
-      box-shadow: 0 16px 45px -8px rgba(15, 23, 42, 0.06);
-      padding: 38px 36px 42px;
+      width: 86%;
+      max-width: 920px;
+      max-height: 80vh;
+      background: rgba(255, 255, 255, 0.5);
+      -webkit-backdrop-filter: blur(18px);
+      border: 2.5px solid rgba(255, 255, 255, 0.95);
+      border-radius: 38px;
+      box-shadow: 0 20px 50px -10px rgba(15, 23, 42, 0.18);
+      padding: 30px 38px 32px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 30px;
-      animation: popIn 0.28s ease-out;
+      justify-content: center;
+      gap: 22px;
+      animation: popIn 0.3s ease-out;
       margin: auto;
     }
 
     @keyframes popIn {
-      from { opacity: 0; transform: scale(0.98) translateY(8px); }
+      from { opacity: 0; transform: scale(0.97) translateY(10px); }
       to { opacity: 1; transform: scale(1) translateY(0); }
     }
 
@@ -350,34 +417,32 @@
       width: 100%;
     }
     .lobby-title {
-      font-size: clamp(1.2rem, 3.2vw, 2.15rem);
+      font-size: clamp(1.2rem, 2.7vw, 1.95rem);
       font-weight: 900;
       letter-spacing: -0.4px;
-      color: #0f172a;
       display: inline-flex;
       flex-wrap: nowrap;
       align-items: center;
       justify-content: center;
-      gap: clamp(6px, 1.2vw, 12px);
-      line-height: 1.2;
+      gap: 10px;
+      line-height: 1.25;
       white-space: nowrap;
       max-width: 100%;
     }
-    .lobby-title .t-x {
-      color: var(--color-x);
-      font-size: 1.18em;
-      filter: drop-shadow(0 2px 6px rgba(37, 99, 235, 0.25));
+    .lobby-title .t-heart {
+      color: var(--color-heart);
+      font-size: 1.15em;
+      filter: drop-shadow(0 2px 8px rgba(225, 29, 72, 0.35));
     }
-    .lobby-title .t-o {
-      color: var(--color-o);
-      font-size: 1.18em;
-      filter: drop-shadow(0 2px 6px rgba(225, 29, 72, 0.25));
+    .lobby-title .t-robot {
+      color: var(--color-robot);
+      font-size: 1.15em;
+      filter: drop-shadow(0 2px 8px rgba(37, 99, 235, 0.35));
     }
     .lobby-title .title-text {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      color: #0f172a;
     }
     .lobby-title .highlight-brand {
       letter-spacing: -0.5px;
@@ -388,7 +453,7 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      padding: 2px 9px;
+      padding: 2px 10px;
       border-radius: 8px;
       background: linear-gradient(135deg, #2563eb, #7c3aed, #db2777);
       color: #ffffff;
@@ -396,56 +461,28 @@
       font-size: 0.88em;
       font-weight: 900;
       letter-spacing: 0.8px;
-      box-shadow: 0 4px 14px rgba(124, 58, 237, 0.35), 0 0 10px rgba(59, 130, 246, 0.25);
-      border: 1px solid rgba(255, 255, 255, 0.4);
+      box-shadow: 0 4px 14px rgba(124, 58, 237, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.5);
       position: relative;
       overflow: hidden;
       text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
-      animation: aiGlowPulse 2.8s ease-in-out infinite alternate;
       vertical-align: middle;
+      -webkit-text-fill-color: #ffffff;
     }
 
-    .ai-badge::after {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -60%;
-      width: 40%;
-      height: 200%;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
-      transform: rotate(25deg);
-      animation: aiShine 3.2s infinite;
-    }
-
-    @keyframes aiGlowPulse {
-      0% {
-        box-shadow: 0 3px 12px rgba(124, 58, 237, 0.3), 0 0 6px rgba(37, 99, 235, 0.2);
-        transform: translateY(0);
-      }
-      100% {
-        box-shadow: 0 6px 18px rgba(219, 39, 119, 0.45), 0 0 14px rgba(124, 58, 237, 0.4);
-        transform: translateY(-1px);
-      }
-    }
-
-    @keyframes aiShine {
-      0%, 65% { left: -60%; }
-      100% { left: 160%; }
-    }
-
-    /* 3 THẺ SẢNH CHỜ */
     .cards-grid {
       width: 100%;
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 24px;
+      gap: 22px;
       align-items: stretch;
     }
 
     .diff-card {
-      background: #ffffff;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(10px);
       border-radius: 26px;
-      padding: 28px 20px 24px;
+      padding: 22px 18px 20px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -453,9 +490,9 @@
       text-align: center;
       cursor: pointer;
       border: 3px solid transparent;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.03);
+      box-shadow: 0 10px 24px rgba(15, 23, 42, 0.06);
       transition: transform 0.22s cubic-bezier(0.34, 1.4, 0.64, 1), box-shadow 0.22s ease, border-color 0.22s ease;
-      min-height: 270px;
+      min-height: 250px;
     }
 
     .diff-card.card-easy {
@@ -474,81 +511,83 @@
     @keyframes waveGlowEasy {
       0%, 35%, 100% {
         border-color: #a7f3d0;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.03);
+        box-shadow: 0 8px 20px rgba(15, 23, 42, 0.05);
         transform: translateY(0);
       }
       15% {
         border-color: var(--c-easy-border);
-        box-shadow: 0 14px 32px -4px var(--c-easy-glow), 0 0 16px var(--c-easy-glow);
-        transform: translateY(-5px);
+        box-shadow: 0 14px 30px -4px var(--c-easy-glow);
+        transform: translateY(-4px);
       }
     }
 
     @keyframes waveGlowMed {
       0%, 35%, 100% {
         border-color: #bfdbfe;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.03);
+        box-shadow: 0 8px 20px rgba(15, 23, 42, 0.05);
         transform: translateY(0);
       }
       15% {
         border-color: var(--c-med-border);
-        box-shadow: 0 14px 32px -4px var(--c-med-glow), 0 0 16px var(--c-med-glow);
-        transform: translateY(-5px);
+        box-shadow: 0 14px 30px -4px var(--c-med-glow);
+        transform: translateY(-4px);
       }
     }
 
     @keyframes waveGlowHard {
       0%, 35%, 100% {
         border-color: #fecdd3;
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.03);
+        box-shadow: 0 8px 20px rgba(15, 23, 42, 0.05);
         transform: translateY(0);
       }
       15% {
         border-color: var(--c-hard-border);
-        box-shadow: 0 14px 32px -4px var(--c-hard-glow), 0 0 16px var(--c-hard-glow);
-        transform: translateY(-5px);
+        box-shadow: 0 14px 30px -4px var(--c-hard-glow);
+        transform: translateY(-4px);
       }
     }
 
     .diff-card:hover {
       animation: none !important;
-      transform: translateY(-6px) scale(1.025) !important;
+      transform: translateY(-5px) scale(1.025) !important;
       z-index: 5;
     }
     .diff-card.card-easy:hover {
       border-color: var(--c-easy-border) !important;
-      box-shadow: 0 16px 36px -4px var(--c-easy-glow), 0 0 20px var(--c-easy-glow) !important;
+      box-shadow: 0 16px 32px -4px var(--c-easy-glow) !important;
     }
     .diff-card.card-med:hover {
       border-color: var(--c-med-border) !important;
-      box-shadow: 0 16px 36px -4px var(--c-med-glow), 0 0 20px var(--c-med-glow) !important;
+      box-shadow: 0 16px 32px -4px var(--c-med-glow) !important;
     }
     .diff-card.card-hard:hover {
       border-color: var(--c-hard-border) !important;
-      box-shadow: 0 16px 36px -4px var(--c-hard-glow), 0 0 20px var(--c-hard-glow) !important;
+      box-shadow: 0 16px 32px -4px var(--c-hard-glow) !important;
     }
 
     .card-graphic {
-      width: 104px;
-      height: 98px;
+      width: 88px;
+      height: 84px;
       display: flex;
       align-items: center;
       justify-content: center;
       transition: transform 0.22s ease;
     }
     .diff-card:hover .card-graphic {
-      transform: scale(1.06);
+      transform: scale(1.08);
     }
-    .card-graphic svg {
+    .diff-img {
       width: 100%;
       height: 100%;
+      object-fit: contain;
+      display: block;
     }
 
     .card-level-name {
-      font-size: 1.45rem;
+      font-size: 1.35rem;
       font-weight: 900;
       letter-spacing: -0.3px;
-      margin: 10px 0 16px;
+      margin: 8px 0 12px;
     }
     .card-easy .card-level-name { color: #059669; }
     .card-med .card-level-name { color: #2563eb; }
@@ -556,21 +595,20 @@
 
     .btn-card-choose {
       width: 100%;
-      max-width: 160px;
-      padding: 11px 0;
+      max-width: 150px;
+      padding: 10px 0;
       border: none;
       border-radius: 999px;
       font-family: inherit;
       font-size: 0.95rem;
       font-weight: 900;
-      letter-spacing: 0.4px;
+      letter-spacing: 0.5px;
       color: #fff;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      transition: all 0.2s ease;
       pointer-events: none;
     }
     .card-easy .btn-card-choose { background: #059669; }
@@ -578,20 +616,37 @@
     .card-hard .btn-card-choose { background: #e11d48; }
 
     /* ========================================================
-       MÀN HÌNH 2: BÀN CỜ CHÍNH (CĂN GIỮA HOÀN HẢO MỌI THỜI ĐIỂM)
+       4. MÀN HÌNH BÀN CỜ KHI CHƠI
        ======================================================== */
     .gameplay-wrapper {
-      width: 100%;
-      height: 100%;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
       position: relative;
-      min-height: 0;
+      background: rgba(255, 255, 255, 0.8);
+      -webkit-backdrop-filter: blur(20px);
+      border: 2.5px solid rgba(255, 255, 255, 0.95);
+      border-radius: 40px;
+      padding: 24px 46px 22px;
+      box-shadow: 0 24px 60px -10px rgba(15, 23, 42, 0.22);
+      max-width: 780px;
+      width: 100%;
     }
 
-    /* BÀN CỜ LUÔN LÀ TÂM ĐIỂM Ở CHÍNH GIỮA */
+    /* TIÊU ĐỀ PHÍA TRÊN BÀN CỜ KHI CHƠI */
+    .gameplay-header-title {
+      font-size: clamp(1.05rem, 2.2vw, 1.45rem);
+      font-weight: 900;
+      letter-spacing: -0.3px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 14px;
+      text-transform: uppercase;
+    }
+
     .board-container {
       display: flex;
       align-items: center;
@@ -603,8 +658,8 @@
 
     .board-outer {
       position: relative;
-      width: min(58vh, 52vw, 420px);
-      height: min(58vh, 52vw, 420px);
+      width: min(58vh, 50vw, 400px);
+      height: min(58vh, 50vw, 400px);
       aspect-ratio: 1 / 1;
     }
 
@@ -616,10 +671,10 @@
       pointer-events: none;
     }
     .grid-lines line {
-      stroke: #94a3b8;
-      stroke-width: 8.5;
+      stroke: #64748b;
+      stroke-width: 9;
       stroke-linecap: round;
-      opacity: 0.85;
+      opacity: 0.9;
     }
 
     .board-grid {
@@ -642,24 +697,33 @@
       transition: background-color 0.15s ease;
     }
     .cell:hover:not(.taken) {
-      background: rgba(37, 99, 235, 0.05);
+      background: rgba(225, 29, 72, 0.08);
       border-radius: 20px;
     }
     .cell.taken { cursor: default; }
 
+    /* QUÂN CỜ TRÁI TIM (SVG) */
     .piece-svg {
-      width: 70%;
-      height: 70%;
+      width: 74%;
+      height: 74%;
+      filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.16));
+      animation: piecePop 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
     }
-    .color-x { color: var(--color-x); }
-    .color-o { color: var(--color-o); }
 
-    .draw-path {
-      stroke-dasharray: 120;
-      stroke-dashoffset: 120;
-      animation: drawPiece 0.2s ease-out forwards;
+    /* QUÂN CỜ ROBOT (THẺ HÌNH ẢNH <img>) */
+    .piece-img {
+      width: 74%;
+      height: 74%;
+      object-fit: contain;
+      filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.16));
+      animation: piecePop 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+      display: block;
     }
-    @keyframes drawPiece { to { stroke-dashoffset: 0; } }
+
+    @keyframes piecePop {
+      0% { transform: scale(0.3) rotate(-8deg); opacity: 0; }
+      100% { transform: scale(1) rotate(0deg); opacity: 1; }
+    }
 
     .strike-svg {
       position: absolute;
@@ -678,20 +742,21 @@
     }
     .strike-line.show { stroke-dashoffset: 0; }
 
-    /* BẢNG ĐIỂM (TRONG SUỐT, KHÔNG CÓ NỀN TRẮNG ĐÈ) */
+    /* BẢNG ĐIỂM */
     .gameplay-footer {
-      margin-top: 18px;
+      margin-top: 16px;
       display: flex;
       justify-content: center;
       align-items: center;
       flex-shrink: 0;
+      width: 100%;
     }
 
     .scoreboard {
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 48px;
+      gap: 52px;
       background: transparent !important;
       box-shadow: none !important;
       padding: 0 !important;
@@ -705,7 +770,7 @@
     }
 
     .score-title {
-      font-size: 0.8rem;
+      font-size: 0.86rem;
       font-weight: 800;
       letter-spacing: 0.5px;
       color: var(--text-subtle);
@@ -717,27 +782,25 @@
     .score-title.active-turn { color: var(--text); }
 
     .turn-dot {
-      width: 7px;
-      height: 7px;
+      width: 8px;
+      height: 8px;
       border-radius: 50%;
       background: transparent;
     }
-    .active-turn .turn-dot.x { background: var(--color-x); }
-    .active-turn .turn-dot.o { background: var(--color-o); }
+    .active-turn .turn-dot.heart { background: var(--color-heart); box-shadow: 0 0 8px var(--color-heart); }
+    .active-turn .turn-dot.robot { background: var(--color-robot); box-shadow: 0 0 8px var(--color-robot); }
 
     .score-value {
-      font-size: 1.75rem;
+      font-size: 1.85rem;
       font-weight: 900;
       line-height: 1.1;
       color: var(--text);
     }
-    .score-block.x .score-value { color: var(--color-x); }
-    .score-block.o .score-value { color: var(--color-o); }
+    .score-block.heart .score-value { color: var(--color-heart); }
+    .score-block.robot .score-value { color: var(--color-robot); }
     .score-block.tie .score-value { color: var(--color-tie); }
 
-    /* ========================================================
-       MODAL THÔNG BÁO KẾT QUẢ POPUP
-       ======================================================== */
+    /* MODAL POPUP */
     .modal-backdrop {
       position: fixed;
       inset: 0;
@@ -789,14 +852,14 @@
       position: relative;
     }
     .modal-icon-badge.win {
-      background: #eff6ff;
-      border: 3px solid #3b82f6;
-      box-shadow: 0 0 24px rgba(37, 99, 235, 0.25);
-    }
-    .modal-icon-badge.lose {
       background: #fff1f2;
       border: 3px solid #f43f5e;
       box-shadow: 0 0 24px rgba(225, 29, 72, 0.25);
+    }
+    .modal-icon-badge.lose {
+      background: #eff6ff;
+      border: 3px solid #3b82f6;
+      box-shadow: 0 0 24px rgba(37, 99, 235, 0.25);
     }
     .modal-icon-badge.tie {
       background: #fef3c7;
@@ -831,15 +894,14 @@
       box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
       transition: all 0.2s ease;
     }
-    .btn-modal-action.win { background: #2563eb; }
-    .btn-modal-action.lose { background: #e11d48; }
+    .btn-modal-action.win { background: #e11d48; }
+    .btn-modal-action.lose { background: #2563eb; }
     .btn-modal-action.tie { background: #f59e0b; }
     .btn-modal-action:hover {
       filter: brightness(1.08);
       transform: translateY(-2px);
     }
 
-    /* CONFETTI CANVAS */
     #confettiCanvas {
       position: absolute;
       inset: 0;
@@ -849,18 +911,35 @@
       z-index: 101;
     }
 
-    /* ========================================================
-       RESPONSIVE & LANDSCAPE
-       ======================================================== */
-    @media (max-width: 720px) {
+    /* RESPONSIVE */
+    @media (max-width: 860px) {
+      .mascot-robot, .ingame-robot, .decor-bubble {
+        display: none !important;
+      }
+      .logo-slot {
+        width: 180px;
+        height: 180px;
+        top: -20px;
+        right: 12px;
+      }
+      .logo-slot-left {
+        width: 54px;
+        height: 54px;
+        top: 10px;
+        left: 12px;
+      }
+    }
+
+    @media (max-width: 680px) {
       .top-header { padding: 10px 16px; }
       .lobby-box {
-        padding: 26px 16px;
-        gap: 20px;
+        width: 92%;
+        padding: 24px 18px 26px;
+        gap: 16px;
         border-radius: 28px;
       }
       .lobby-title {
-        font-size: clamp(0.96rem, 4vw, 1.3rem);
+        font-size: clamp(0.95rem, 3.8vw, 1.2rem);
         gap: 5px;
         white-space: normal;
         flex-wrap: wrap;
@@ -868,172 +947,101 @@
       }
       .cards-grid {
         grid-template-columns: 1fr;
-        gap: 14px;
+        gap: 12px;
         max-width: 320px;
       }
       .diff-card {
         flex-direction: row;
         text-align: left;
-        padding: 16px 20px;
+        padding: 14px 18px;
         justify-content: space-between;
         min-height: auto;
       }
       .card-graphic {
-        width: 60px;
-        height: 60px;
+        width: 64px;
+        height: 64px;
       }
       .card-level-name {
         margin: 0;
-        font-size: 1.2rem;
+        font-size: 1.15rem;
       }
       .btn-card-choose {
         width: auto;
-        padding: 9px 20px;
+        padding: 8px 18px;
+      }
+      .gameplay-wrapper {
+        padding: 18px 20px 16px;
+        border-radius: 30px;
+      }
+      .gameplay-header-title {
+        font-size: 1.05rem;
+        margin-bottom: 10px;
       }
       .board-outer {
-        width: min(86vw, 86vw, 420px);
-        height: min(86vw, 86vw, 420px);
+        width: min(84vw, 84vw, 360px);
+        height: min(84vw, 84vw, 360px);
       }
       .scoreboard { gap: 32px; }
     }
+    .title-robot-icon {
+  width: clamp(28px, 2.8vw, 42px);
+  height: clamp(28px, 2.8vw, 42px);
+  object-fit: contain;
+  vertical-align: middle;
+  display: inline-block;
+  filter: drop-shadow(0 3px 8px rgba(37, 99, 235, 0.35));
+  animation: robotIconBounce 2.5s ease-in-out infinite alternate;
+}
 
-    /* XOAY NGANG MÀN HÌNH (LANDSCAPE): BÀN CỜ ĐƯỢC CĂN CHÍNH GIỮA TUYỆT ĐỐI */
-    @media (orientation: landscape) and (max-height: 580px) {
-      .top-header { 
-        padding: 8px 24px; 
-    /* XOAY NGANG MÀN HÌNH (LANDSCAPE): BÀN CỜ VÀ BẢNG ĐIỂM ĐỒNG BỘ VỚI DESKTOP */
-    @media (orientation: landscape) and (max-height: 720px) {
-      .top-header { 
-        padding: 8px 24px; 
-      }
-      .logo-slot { height: 34px; }
-      .btn-header-back { width: 30px; height: 30px; }
-
-      .lobby-box {
-        padding: 18px 24px 22px;
-        gap: 16px;
-        max-width: 820px;
-      }
-      .lobby-title { font-size: 1.25rem; }
-      .cards-grid {
-        gap: 16px;
-        max-width: 760px;
-      }
-      .diff-card {
-        padding: 16px 14px 16px;
-        min-height: 190px;
-      }
-      .card-graphic {
-        width: 68px;
-        height: 62px;
-      }
-      .card-level-name {
-        font-size: 1.15rem;
-        margin: 6px 0 10px;
-      }
-      .btn-card-choose {
-        padding: 8px 0;
-        font-size: 0.88rem;
-      }
-
-      /* Màn chơi ngang: Giữ nguyên bố cục dọc trung tâm như Desktop */
-      .gameplay-wrapper {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        height: 100%;
-        position: relative;
-      }
-
-      .board-container {
-        position: relative;
-        margin: 0 auto;
-      }
-      .board-outer {
-        width: min(56vh, 48vw, 380px);
-        height: min(56vh, 48vw, 380px);
-      }
-
-      /* Bảng điểm luôn nằm ngang phía dưới bàn cờ, không bao giờ nhảy sang phải */
-      .gameplay-footer {
-        position: static;
-        margin-top: 14px;
-        transform: none;
-      }
-      .scoreboard {
-        flex-direction: row;
-        gap: 40px;
-        background: transparent !important;
-        box-shadow: none !important;
-        padding: 0 !important;
-      }
-      .score-value {
-        font-size: 1.6rem;
-      }
-      .score-title {
-        font-size: 0.78rem;
-      }
-    }
+@keyframes robotIconBounce {
+  0% { transform: translateY(0px) rotate(0deg); }
+  100% { transform: translateY(-4px) rotate(6deg); }
+}
   </style>
 </head>
 <body>
 
-  <!-- BACKGROUND DECORATIONS -->
-  <div class="bg-decorations">
-    <div class="bg-dot-grid"></div>
-    <div class="ambient-glow aura-blue"></div>
-    <div class="ambient-glow aura-pink"></div>
-    <div class="ambient-glow aura-green"></div>
-
-    <svg class="floating-xo xo-1" width="52" height="52" viewBox="0 0 48 48">
-      <path d="M12 12 L36 36 M36 12 L12 36" stroke="#2563eb" stroke-width="7" stroke-linecap="round"/>
-    </svg>
-    <svg class="floating-xo xo-2" width="58" height="58" viewBox="0 0 56 56">
-      <circle cx="28" cy="28" r="20" stroke="#f43f5e" stroke-width="6.5" fill="none"/>
-    </svg>
-    <svg class="floating-xo xo-3" width="60" height="60" viewBox="0 0 60 60">
-      <path d="M15 15 L45 45 M45 15 L15 45" stroke="#10b981" stroke-width="7.5" stroke-linecap="round"/>
-    </svg>
-    <svg class="floating-xo xo-4" width="46" height="46" viewBox="0 0 48 48">
-      <circle cx="24" cy="24" r="17" stroke="#3b82f6" stroke-width="6" fill="none"/>
-    </svg>
-    <svg class="floating-xo xo-5" width="36" height="36" viewBox="0 0 36 36">
-      <path d="M9 9 L27 27 M27 9 L9 27" stroke="#f59e0b" stroke-width="5" stroke-linecap="round"/>
-    </svg>
-    <svg class="floating-xo xo-6" width="42" height="42" viewBox="0 0 40 40">
-      <circle cx="20" cy="20" r="14" stroke="#ec4899" stroke-width="5.5" fill="none"/>
-    </svg>
+  <!-- LỚP 6 QUẢ CẦU AI TRANG TRÍ XUNG QUANH NỀN -->
+  <div class="floating-decor-layer">
+    <img src="./image/1.png" alt="Decor AI 1" class="decor-bubble b1">
+    <img src="./image/2.png" alt="Decor AI 2" class="decor-bubble b2">
+    <img src="./image/3.png" alt="Decor AI 3" class="decor-bubble b3">
+    <img src="./image/4.png" alt="Decor AI 4" class="decor-bubble b4">
+    <img src="./image/5.png" alt="Decor AI 5" class="decor-bubble b5">
+    <img src="./image/6.png" alt="Decor AI 6" class="decor-bubble b6">
   </div>
 
-  <!-- HEADER -->
+  <!-- LOGO GÓC TRÊN BÊN TRÁI -->
+  <div class="logo-slot-left" id="userLogoLeft" title="Logo thương hiệu">
+    <img src="./image/logo-left.png" alt="Logo Trái" onerror="this.onerror=null; this.src='./image/logo.png';">
+  </div>
+
+  <!-- ROBOT MASCOT SẢNH CHỜ: BÊN TRÁI -->
+  <div class="mascot-robot" id="mascotRobot" title="Bạn AI đồng hành">
+    <img src="./image/ai-vuive.png" alt="AI Robot" class="mascot-img">
+  </div>
+
+  <!-- ROBOT GÓC PHẢI MÀN HÌNH CHƠI GAME: HIỆN KHI VÀO GAME -->
+  <div class="ingame-robot" id="ingameRobot" title="AI Đối thủ">
+    <img src="./image/ai-suynghi.png" alt="AI Robot" class="mascot-img">
+  </div>
+
+  <!-- HÌNH ẢNH / LOGO GÓC TRÊN BÊN PHẢI -->
+  <div class="logo-slot" id="userLogoSlot" title="Logo thương hiệu">
+    <img id="userLogoImg" src="./image/chuAI.png" alt="Logo Phải" class="logo-img">
+  </div>
+
+  <!-- HEADER GÓC TRÁI -->
   <header class="top-header">
-    <div class="header-left">
-      <button class="btn-header-back" id="btnHeaderBack" title="Quay lại sảnh" aria-label="Quay lại">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="15 18 9 12 15 6"></polyline>
-        </svg>
-      </button>
+    <button class="btn-header-back" id="btnHeaderBack" title="Quay lại sảnh" aria-label="Quay lại">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="15 18 9 12 15 6"></polyline>
+      </svg>
+    </button>
 
-      <div class="brand-group">
-        <div class="capsule-badge" id="brandLogoHome">
-          <span class="badge-x">✕</span>
-          <span class="badge-o">◯</span>
-          <span class="badge-text">TIC-TAC-TOE</span>
-        </div>
-
-        <!-- HUY HIỆU MỨC ĐỘ ĐANG CHƠI ĐẶT NGAY DƯỚI TIC-TAC-TOE -->
-        <div class="game-difficulty-indicator diff-medium" id="gameDiffBadge">
-          <span class="diff-status-dot"></span>
-          <span id="gameDiffText">TRUNG BÌNH</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Ô DÀNH RIÊNG CHO ẢNH LOGO -->
-    <div class="logo-slot" id="userLogoSlot" title="Logo thương hiệu">
-      <img id="userLogoImg" src="./image/S&S_Logo.png" alt="Logo" class="logo-img">
+    <div class="game-difficulty-indicator diff-medium" id="gameDiffBadge">
+      <span class="diff-status-dot"></span>
+      <span id="gameDiffText">TRUNG BÌNH</span>
     </div>
   </header>
 
@@ -1045,25 +1053,20 @@
         
         <div class="lobby-header">
           <h1 class="lobby-title">
-            <span class="t-x">X</span>
-            <span class="title-text">
-              Thách đấu chơi cờ <span class="highlight-brand">TIC-TAC-TOE</span> cùng
-              <span class="ai-badge" title="Trí tuệ nhân tạo">AI</span>
-            </span>
-            <span class="t-o">O</span>
-          </h1>
+  <span class="t-heart">❤️</span>
+  <span class="title-text shimmer-text">
+    Thách đấu chơi cờ <span class="highlight-brand">TIC-TAC-TOE</span> cùng
+  </span>
+  <span class="ai-badge" title="Trí tuệ nhân tạo">AI</span>
+  <img src="./image/robot-ai.png" alt="Robot AI" class="title-robot-icon">
+</h1>
         </div>
 
         <div class="cards-grid">
           <!-- THẺ 1: DỄ -->
           <div class="diff-card card-easy" data-select-diff="easy">
             <div class="card-graphic">
-              <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="50" cy="50" r="42" stroke="#059669" stroke-width="3" stroke-dasharray="6 4.5"/>
-                <path d="M34 34L48 48M48 34L34 48" stroke="#059669" stroke-width="7" stroke-linecap="round"/>
-                <circle cx="65" cy="65" r="12" stroke="#059669" stroke-width="6"/>
-                <circle cx="70" cy="35" r="4.5" fill="#34d399"/>
-              </svg>
+              <img src="./image/easy.png" alt="Dễ" class="diff-img" onerror="this.onerror=null; this.src='https://api.iconify.design/lucide:sparkles.svg?color=%23059669';">
             </div>
             <div class="card-level-name">DỄ</div>
             <button class="btn-card-choose" tabindex="-1">CHỌN</button>
@@ -1072,12 +1075,7 @@
           <!-- THẺ 2: TRUNG BÌNH -->
           <div class="diff-card card-med" data-select-diff="medium">
             <div class="card-graphic">
-              <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="12" y="12" width="76" height="76" rx="22" stroke="#2563eb" stroke-width="3.2"/>
-                <path d="M28 28L46 46M46 28L28 46" stroke="#2563eb" stroke-width="7" stroke-linecap="round"/>
-                <circle cx="68" cy="68" r="14" stroke="#2563eb" stroke-width="6"/>
-                <path d="M42 68H30M68 30V42" stroke="#93c5fd" stroke-width="3.5" stroke-linecap="round"/>
-              </svg>
+              <img src="./image/medium.png" alt="Trung Bình" class="diff-img" onerror="this.onerror=null; this.src='https://api.iconify.design/lucide:zap.svg?color=%232563eb';">
             </div>
             <div class="card-level-name">TRUNG BÌNH</div>
             <button class="btn-card-choose" tabindex="-1">CHỌN</button>
@@ -1086,12 +1084,7 @@
           <!-- THẺ 3: KHÓ -->
           <div class="diff-card card-hard" data-select-diff="hard">
             <div class="card-graphic">
-              <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M50 14L86 32V68L50 86L14 68V32L50 14Z" stroke="#e11d48" stroke-width="3.2"/>
-                <path d="M42 26L46 30L50 25L54 30L58 26L57 33H43L42 26Z" fill="#f59e0b"/>
-                <path d="M30 46L46 62M46 46L30 62" stroke="#2563eb" stroke-width="6.5" stroke-linecap="round"/>
-                <circle cx="68" cy="54" r="13" stroke="#e11d48" stroke-width="6"/>
-              </svg>
+              <img src="./image/hard.png" alt="Khó" class="diff-img" onerror="this.onerror=null; this.src='https://api.iconify.design/lucide:flame.svg?color=%23e11d48';">
             </div>
             <div class="card-level-name">KHÓ</div>
             <button class="btn-card-choose" tabindex="-1">CHỌN</button>
@@ -1105,7 +1098,12 @@
     <div class="view-screen screen-hidden" id="screenGame">
       <div class="gameplay-wrapper">
 
-        <!-- BÀN CỜ CHÍNH TÂM TUYỆT ĐỐI -->
+        <!-- TIÊU ĐỀ NẰM Ở GIỮA PHÍA TRÊN BÀN CỜ -->
+        <div class="gameplay-header-title">
+          <span class="shimmer-text">CHƠI CỜ TIC-TAC-TOE CÙNG</span>
+          <span class="ai-badge" title="Trí tuệ nhân tạo">AI</span>
+        </div>
+
         <div class="board-container" id="boardArea" title="Bàn cờ">
           <div class="board-outer">
             <svg class="grid-lines" viewBox="0 0 300 300">
@@ -1133,15 +1131,14 @@
           </div>
         </div>
 
-        <!-- BẢNG ĐIỂM -->
         <div class="gameplay-footer">
           <div class="scoreboard">
-            <div class="score-block x">
-              <span class="score-title active-turn" id="labelX">
-                <span class="turn-dot x"></span>
-                <span>BẠN (X)</span>
+            <div class="score-block heart">
+              <span class="score-title active-turn" id="labelHeart">
+                <span class="turn-dot heart"></span>
+                <span>BẠN (❤️)</span>
               </span>
-              <span class="score-value" id="scoreX">0</span>
+              <span class="score-value" id="scoreHeart">0</span>
             </div>
 
             <div class="score-block tie">
@@ -1149,12 +1146,12 @@
               <span class="score-value" id="scoreTie">0</span>
             </div>
 
-            <div class="score-block o">
-              <span class="score-title" id="labelO">
-                <span class="turn-dot o"></span>
-                <span>AI (O)</span>
+            <div class="score-block robot">
+              <span class="score-title" id="labelRobot">
+                <span class="turn-dot robot"></span>
+                <span>AI (🤖)</span>
               </span>
-              <span class="score-value" id="scoreO">0</span>
+              <span class="score-value" id="scoreRobot">0</span>
             </div>
           </div>
         </div>
@@ -1174,7 +1171,7 @@
     </div>
   </div>
 
-  <!-- LOGIC GAMEPLAY & MINIMAX & AUDIO & CONFETTI -->
+  <!-- JAVASCRIPT GAMEPLAY -->
   <script>
     class SoundFX {
       constructor() { this.ctx = null; }
@@ -1200,8 +1197,8 @@
           osc.stop(this.ctx.currentTime + duration);
         } catch(e) {}
       }
-      playX() { this.playTone(580, 'sine', 0.07, 0.2); }
-      playO() { this.playTone(420, 'sine', 0.08, 0.2); }
+      playHeart() { this.playTone(620, 'sine', 0.08, 0.22); }
+      playRobot() { this.playTone(380, 'triangle', 0.09, 0.22); }
       playClick() { this.playTone(800, 'sine', 0.03, 0.12); }
       playWin() {
         [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => {
@@ -1222,14 +1219,13 @@
 
     const sound = new SoundFX();
 
-    // Hệ thống hiệu ứng Confetti pháo hoa
     class ConfettiManager {
       constructor(canvas) {
         this.canvas = canvas;
         this.ctx = canvas.getContext('2d');
         this.particles = [];
         this.animId = null;
-        this.colors = ['#2563eb', '#3b82f6', '#ec4899', '#f59e0b', '#10b981', '#8b5cf6'];
+        this.colors = ['#e11d48', '#f43f5e', '#3b82f6', '#f59e0b', '#10b981', '#a855f7'];
       }
       resize() {
         this.canvas.width = window.innerWidth;
@@ -1238,14 +1234,14 @@
       fire() {
         this.resize();
         this.particles = [];
-        for (let i = 0; i < 75; i++) {
+        for (let i = 0; i < 80; i++) {
           this.particles.push({
             x: this.canvas.width / 2,
             y: this.canvas.height / 2,
-            r: Math.random() * 5 + 3,
+            r: Math.random() * 5.5 + 3,
             color: this.colors[Math.floor(Math.random() * this.colors.length)],
-            vx: (Math.random() - 0.5) * 14,
-            vy: (Math.random() - 0.8) * 16,
+            vx: (Math.random() - 0.5) * 15,
+            vy: (Math.random() - 0.8) * 17,
             gravity: 0.38,
             rotation: Math.random() * 360,
             rotSpeed: (Math.random() - 0.5) * 8,
@@ -1307,47 +1303,53 @@
 
     const state = {
       board: Array(9).fill(null),
-      currentTurn: 'X',
+      currentTurn: 'H',
       isOver: false,
       difficulty: 'medium',
       isBotThinking: false,
-      scores: { X: 0, O: 0, tie: 0 }
+      scores: { H: 0, R: 0, tie: 0 }
     };
 
-    // DOM Elements
     const screenLobby = document.getElementById('screenLobby');
     const screenGame = document.getElementById('screenGame');
+    const mascotRobot = document.getElementById('mascotRobot');
+    const ingameRobot = document.getElementById('ingameRobot');
+
     const btnHeaderBack = document.getElementById('btnHeaderBack');
-    const brandLogoHome = document.getElementById('brandLogoHome');
     const diffCards = document.querySelectorAll('.diff-card');
     const cells = document.querySelectorAll('.cell');
     const strikeLine = document.getElementById('strikeLine');
-    const scoreXElem = document.getElementById('scoreX');
-    const scoreOElem = document.getElementById('scoreO');
+    const scoreHeartElem = document.getElementById('scoreHeart');
+    const scoreRobotElem = document.getElementById('scoreRobot');
     const scoreTieElem = document.getElementById('scoreTie');
-    const labelX = document.getElementById('labelX');
-    const labelO = document.getElementById('labelO');
+    const labelHeart = document.getElementById('labelHeart');
+    const labelRobot = document.getElementById('labelRobot');
     const gameDiffBadge = document.getElementById('gameDiffBadge');
     const gameDiffText = document.getElementById('gameDiffText');
 
-    // Modal elements
     const resultModal = document.getElementById('resultModal');
     const modalBadge = document.getElementById('modalBadge');
     const modalTitle = document.getElementById('modalTitle');
     const modalDesc = document.getElementById('modalDesc');
     const btnModalAction = document.getElementById('btnModalAction');
 
-    const X_SVG = `
-      <svg class="piece-svg color-x" viewBox="0 0 50 50">
-        <line class="draw-path" x1="12" y1="12" x2="38" y2="38" stroke="currentColor" stroke-width="5.5" stroke-linecap="round" />
-        <line class="draw-path" x1="38" y1="12" x2="12" y2="38" stroke="currentColor" stroke-width="5.5" stroke-linecap="round" />
+    // QUÂN CỜ TRÁI TIM (SVG)
+    const HEART_SVG = `
+      <svg class="piece-svg" viewBox="0 0 50 50">
+        <defs>
+          <linearGradient id="heartGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#fb7185"/>
+            <stop offset="100%" stop-color="#e11d48"/>
+          </linearGradient>
+        </defs>
+        <path d="M25 43 C25 43 7 31 7 19 C7 11 14 7 20 10 C23 12 25 15 25 15 C25 15 27 12 30 10 C36 7 43 11 43 19 C43 31 25 43 25 43 Z" 
+              fill="url(#heartGrad)" stroke="#be123c" stroke-width="2.2" stroke-linejoin="round"/>
       </svg>
     `;
 
-    const O_SVG = `
-      <svg class="piece-svg color-o" viewBox="0 0 50 50">
-        <circle class="draw-path" cx="25" cy="25" r="14" fill="none" stroke="currentColor" stroke-width="5.5" stroke-linecap="round" />
-      </svg>
+    // QUÂN CỜ ROBOT: THẺ HÌNH ẢNH <img>
+    const ROBOT_IMG = `
+      <img src="./image/robot-ai.png" alt="Robot" class="piece-img" onerror="this.onerror=null; this.src='https://api.iconify.design/lucide:bot.svg?color=%232563eb';">
     `;
 
     function checkWinner(b) {
@@ -1366,8 +1368,8 @@
     function minimax(tempBoard, depth, isMaximizing) {
       const outcome = checkWinner(tempBoard);
       if (outcome) {
-        if (outcome.winner === 'O') return 10 - depth;
-        if (outcome.winner === 'X') return depth - 10;
+        if (outcome.winner === 'R') return 10 - depth;
+        if (outcome.winner === 'H') return depth - 10;
         return 0;
       }
 
@@ -1376,7 +1378,7 @@
       if (isMaximizing) {
         let best = -Infinity;
         for (const idx of empty) {
-          tempBoard[idx] = 'O';
+          tempBoard[idx] = 'R';
           best = Math.max(best, minimax(tempBoard, depth + 1, false));
           tempBoard[idx] = null;
         }
@@ -1384,7 +1386,7 @@
       } else {
         let best = Infinity;
         for (const idx of empty) {
-          tempBoard[idx] = 'X';
+          tempBoard[idx] = 'H';
           best = Math.min(best, minimax(tempBoard, depth + 1, true));
           tempBoard[idx] = null;
         }
@@ -1409,7 +1411,7 @@
       if (state.difficulty === 'easy') {
         const smart = Math.random() < 0.2;
         if (smart) {
-          const w = findWinningMove('O') || findWinningMove('X');
+          const w = findWinningMove('R') || findWinningMove('H');
           if (w !== null) return w;
         }
         return empty[Math.floor(Math.random() * empty.length)];
@@ -1418,7 +1420,7 @@
       if (state.difficulty === 'medium') {
         const useMinimax = Math.random() < 0.55;
         if (!useMinimax) {
-          const w = findWinningMove('O') || findWinningMove('X');
+          const w = findWinningMove('R') || findWinningMove('H');
           if (w !== null) return w;
           if (empty.includes(4)) return 4;
           return empty[Math.floor(Math.random() * empty.length)];
@@ -1431,7 +1433,7 @@
       let chosen = empty[0];
 
       for (const idx of empty) {
-        state.board[idx] = 'O';
+        state.board[idx] = 'R';
         const score = minimax(state.board, 0, false);
         state.board[idx] = null;
         if (score > bestScore) {
@@ -1450,10 +1452,10 @@
 
       const cell = cells[index];
       cell.classList.add('taken');
-      cell.innerHTML = p === 'X' ? X_SVG : O_SVG;
+      cell.innerHTML = p === 'H' ? HEART_SVG : ROBOT_IMG;
 
-      if (p === 'X') sound.playX();
-      else sound.playO();
+      if (p === 'H') sound.playHeart();
+      else sound.playRobot();
 
       const outcome = checkWinner(state.board);
       if (outcome) {
@@ -1461,10 +1463,10 @@
         return;
       }
 
-      state.currentTurn = p === 'X' ? 'O' : 'X';
+      state.currentTurn = p === 'H' ? 'R' : 'H';
       updateTurnIndicator();
 
-      if (state.currentTurn === 'O') {
+      if (state.currentTurn === 'R') {
         state.isBotThinking = true;
         setTimeout(() => {
           if (!state.isOver) {
@@ -1490,13 +1492,13 @@
       const w = outcome.winner;
       state.scores[w]++;
 
-      if (w === 'X') scoreXElem.textContent = state.scores.X;
-      else scoreOElem.textContent = state.scores.O;
+      if (w === 'H') scoreHeartElem.textContent = state.scores.H;
+      else scoreRobotElem.textContent = state.scores.R;
 
       drawStrike(outcome.pattern, w);
 
       setTimeout(() => {
-        if (w === 'X') {
+        if (w === 'H') {
           sound.playWin();
           confetti.fire();
           showResultModal('win');
@@ -1512,20 +1514,20 @@
       btnModalAction.className = 'btn-modal-action ' + type;
 
       if (type === 'win') {
-        modalBadge.textContent = '🏆';
-        modalTitle.textContent = 'EM ĐÃ THẮNG! 🎉';
-        modalDesc.textContent = 'Em đánh bại AI rồi!';
-        btnModalAction.textContent = 'CHƠI LẠI';
+        modalBadge.textContent = '❤️';
+        modalTitle.textContent = 'BẠN ĐÃ THẮNG! 🎉';
+        modalDesc.textContent = 'Trái tim đã đánh bại trí tuệ của AI!';
+        btnModalAction.textContent = 'CHƠI TIẾP';
       } else if (type === 'lose') {
         modalBadge.textContent = '🤖';
         modalTitle.textContent = 'AI ĐÃ THẮNG!';
-        modalDesc.textContent = 'Cố gắng ở ván sau nhé!';
+        modalDesc.textContent = 'Robot xuất sắc quá! Cố gắng ván sau nhé!';
         btnModalAction.textContent = 'CHƠI LẠI';
       } else {
         modalBadge.textContent = '🤝';
         modalTitle.textContent = 'HÒA!';
-        modalDesc.textContent = 'Bất phân thắng bại!';
-        btnModalAction.textContent = 'CHƠI LẠI';
+        modalDesc.textContent = 'Cả hai đều ngang tài ngang sức!';
+        btnModalAction.textContent = 'CHƠI TIẾP';
       }
 
       resultModal.classList.add('show');
@@ -1547,7 +1549,7 @@
       strikeLine.setAttribute('y1', c.y1);
       strikeLine.setAttribute('x2', c.x2);
       strikeLine.setAttribute('y2', c.y2);
-      strikeLine.style.stroke = winner === 'X' ? 'var(--color-x)' : 'var(--color-o)';
+      strikeLine.style.stroke = winner === 'H' ? 'var(--color-heart)' : 'var(--color-robot)';
       strikeLine.classList.add('show');
     }
 
@@ -1560,18 +1562,18 @@
     }
 
     function updateTurnIndicator() {
-      if (state.currentTurn === 'X') {
-        labelX.classList.add('active-turn');
-        labelO.classList.remove('active-turn');
+      if (state.currentTurn === 'H') {
+        labelHeart.classList.add('active-turn');
+        labelRobot.classList.remove('active-turn');
       } else {
-        labelO.classList.add('active-turn');
-        labelX.classList.remove('active-turn');
+        labelRobot.classList.add('active-turn');
+        labelHeart.classList.remove('active-turn');
       }
     }
 
     function startNewRound() {
       state.board = Array(9).fill(null);
-      state.currentTurn = 'X';
+      state.currentTurn = 'H';
       state.isOver = false;
       state.isBotThinking = false;
 
@@ -1585,9 +1587,9 @@
     }
 
     function resetScores() {
-      state.scores = { X: 0, O: 0, tie: 0 };
-      scoreXElem.textContent = '0';
-      scoreOElem.textContent = '0';
+      state.scores = { H: 0, R: 0, tie: 0 };
+      scoreHeartElem.textContent = '0';
+      scoreRobotElem.textContent = '0';
       scoreTieElem.textContent = '0';
       startNewRound();
     }
@@ -1611,6 +1613,10 @@
 
       screenLobby.classList.add('screen-hidden');
       screenGame.classList.remove('screen-hidden');
+
+      mascotRobot.classList.add('hidden-mascot');
+      ingameRobot.classList.add('show-ingame');
+
       btnHeaderBack.style.display = 'inline-flex';
       gameDiffBadge.style.display = 'inline-flex';
     }
@@ -1619,22 +1625,17 @@
       sound.playClick();
       resultModal.classList.remove('show');
       confetti.stop();
+
       screenGame.classList.add('screen-hidden');
       screenLobby.classList.remove('screen-hidden');
+
+      mascotRobot.classList.remove('hidden-mascot');
+      ingameRobot.classList.remove('show-ingame');
+
       btnHeaderBack.style.display = 'none';
       gameDiffBadge.style.display = 'none';
     }
 
-    function goToLobby() {
-      sound.playClick();
-      resultModal.classList.remove('show');
-      confetti.stop();
-      screenGame.classList.add('screen-hidden');
-      screenLobby.classList.remove('screen-hidden');
-      btnHeaderBack.style.display = 'none';
-    }
-
-    // Sự kiện
     diffCards.forEach(card => {
       card.addEventListener('click', () => {
         const diff = card.getAttribute('data-select-diff');
@@ -1643,7 +1644,6 @@
     });
 
     btnHeaderBack.addEventListener('click', goToLobby);
-    brandLogoHome.addEventListener('click', goToLobby);
 
     cells.forEach(c => {
       c.addEventListener('click', (e) => {
